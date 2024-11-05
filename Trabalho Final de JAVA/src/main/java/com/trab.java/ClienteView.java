@@ -16,9 +16,8 @@ public class ClienteView {
     public ClienteView() {
         frame = new JFrame("Sistema de Cadastro de Clientes");
 
-        // Carrega a imagem e a define como ícone da janela
         ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("logoJRC.png")));
-        frame.setIconImage(icon.getImage());  // Define a imagem como ícone da janela
+        frame.setIconImage(icon.getImage());
 
         frame.setSize(500, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
