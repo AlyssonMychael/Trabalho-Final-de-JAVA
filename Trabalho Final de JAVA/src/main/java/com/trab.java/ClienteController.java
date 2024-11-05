@@ -18,10 +18,9 @@ public class ClienteController {
 
     public void iniciar() {
         carregarClientes();
-        view.mostrarTela(); // Mostra a interface gráfica
+        view.mostrarTela();
     }
 
-    // Configura os listeners dos botões
     private void configurarListeners() {
         view.adicionarListener(new ActionListener() {
             @Override
@@ -66,14 +65,8 @@ public class ClienteController {
                 perfil.append("CPF: ").append(cliente.getCpf()).append("\n");
                 perfil.append("Serviços:\n");
 
-                if (cliente.getServico1() != null) {
-                    perfil.append("- ").append(cliente.getServico1()).append("\n");
-                }
-                if (cliente.getServico2() != null) {
-                    perfil.append("- ").append(cliente.getServico2()).append("\n");
-                }
-                if (cliente.getServico3() != null) {
-                    perfil.append("- ").append(cliente.getServico3()).append("\n");
+                if (cliente.getServico() != null) {
+                    perfil.append("- ").append(cliente.getServico()).append("\n");
                 }
 
                 JOptionPane.showMessageDialog(view.getFrame(), perfil.toString(), "Perfil do Cliente", JOptionPane.INFORMATION_MESSAGE);
@@ -85,7 +78,6 @@ public class ClienteController {
         }
     }
 
-    // Carrega a lista de clientes da base de dados e atualiza a view
     private void carregarClientes() {
         List<Cliente> clientes = clienteDAO.obterTodosClientes();
         view.atualizarListaClientes(clientes);
@@ -95,7 +87,7 @@ public class ClienteController {
         Cliente novoCliente = view.getClienteForm("Adicionar Cliente");
         if (novoCliente != null) {
             clienteDAO.inserirCliente(novoCliente);
-            carregarClientes(); // Atualiza a lista de clientes na view
+            carregarClientes();
             view.mostrarMensagem("Cliente adicionado com sucesso.");
         } else {
             view.mostrarMensagem("Erro ao adicionar cliente.");
@@ -109,7 +101,7 @@ public class ClienteController {
             if (clienteExistente != null) {
                 Cliente clienteEditado = view.getClienteForm("Editar Cliente", clienteExistente);
                 if (clienteEditado != null) {
-                    // Atualiza os dados do cliente no banco de dados
+
                     clienteDAO.alterarCliente(
                             clienteEditado.getId(),
                             clienteEditado.getNome(),
@@ -117,11 +109,9 @@ public class ClienteController {
                             clienteEditado.getTelefone(),
                             clienteEditado.getEndereco(),
                             clienteEditado.getCpf(),
-                            clienteEditado.getServico1(),
-                            clienteEditado.getServico2(),
-                            clienteEditado.getServico3()
+                            clienteEditado.getServico()
                     );
-                    carregarClientes(); // Atualiza a lista de clientes na view
+                    carregarClientes();
                     view.mostrarMensagem("Cliente editado com sucesso.");
                 } else {
                     view.mostrarMensagem("Erro ao editar cliente.");
@@ -137,7 +127,7 @@ public class ClienteController {
     private void deletarCliente() {
         int idClienteSelecionado = view.getClienteSelecionado();
         if (idClienteSelecionado != -1) {
-            // Exibe uma caixa de confirmação antes de excluir
+
             int confirmacao = JOptionPane.showConfirmDialog(view.getFrame(),
                     "Tem certeza que deseja deletar o cliente selecionado?",
                     "Confirmar Exclusão",
@@ -145,7 +135,7 @@ public class ClienteController {
 
             if (confirmacao == JOptionPane.YES_OPTION) {
                 clienteDAO.apagarCliente(idClienteSelecionado);
-                carregarClientes(); // Atualiza a lista de clientes na view
+                carregarClientes();
                 view.mostrarMensagem("Cliente deletado com sucesso.");
             }
         } else {

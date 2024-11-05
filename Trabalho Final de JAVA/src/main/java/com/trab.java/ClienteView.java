@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Objects;
 
 public class ClienteView {
 
@@ -15,12 +16,14 @@ public class ClienteView {
     public ClienteView() {
         frame = new JFrame("Sistema de Cadastro de Clientes");
 
-        // Centraliza a janela
+        // Carrega a imagem e a define como ícone da janela
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("logoJRC.png")));
+        frame.setIconImage(icon.getImage());  // Define a imagem como ícone da janela
+
         frame.setSize(500, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
-        // Layout e componentes
         listModel = new DefaultListModel<>();
         clienteList = new JList<>(listModel);
         JScrollPane scrollPane = new JScrollPane(clienteList);
@@ -49,7 +52,7 @@ public class ClienteView {
         listModel.clear();
         for (Cliente cliente : clientes) {
             listModel.addElement(cliente.getId() + " - " + cliente.getNome() +
-                    " (Serviço: " + cliente.getServico1() + ")");
+                    " (Serviço: " + cliente.getServico() + ")");
         }
     }
 
@@ -74,13 +77,10 @@ public class ClienteView {
         JTextField cpfField = new JTextField(clienteExistente != null ? clienteExistente.getCpf() : "");
 
         String[] servicos = {"Legalizações", "Assessoria Comercial", "Consultoria"};
-        JComboBox<String> servicoCombo1 = new JComboBox<>(servicos);
-        JComboBox<String> servicoCombo2 = new JComboBox<>(servicos);
-        JComboBox<String> servicoCombo3 = new JComboBox<>(servicos);
+        JComboBox<String> servicoCombo = new JComboBox<>(servicos);
 
-        // Definir serviços selecionados se clienteExistente não for nulo
         if (clienteExistente != null) {
-            servicoCombo1.setSelectedItem(clienteExistente.getServico1());
+            servicoCombo.setSelectedItem(clienteExistente.getServico());
         }
 
         Object[] inputFields = {
@@ -89,7 +89,7 @@ public class ClienteView {
                 "Telefone:", telefoneField,
                 "Endereço:", enderecoField,
                 "CPF:", cpfField,
-                "Serviços:", servicoCombo1,
+                "Serviços:", servicoCombo,
         };
 
         int option = JOptionPane.showConfirmDialog(frame, inputFields, titulo, JOptionPane.OK_CANCEL_OPTION);
@@ -106,15 +106,11 @@ public class ClienteView {
                 clienteExistente.setTelefone(telefone);
                 clienteExistente.setEndereco(endereco);
                 clienteExistente.setCpf(cpf);
-                clienteExistente.setServico1((String) servicoCombo1.getSelectedItem());
-                clienteExistente.setServico2((String) servicoCombo2.getSelectedItem());
-                clienteExistente.setServico3((String) servicoCombo3.getSelectedItem());
+                clienteExistente.setServico((String) servicoCombo.getSelectedItem());
                 return clienteExistente;
             } else {
                 return new Cliente(0, nome, email, telefone, endereco, cpf,
-                        (String) servicoCombo1.getSelectedItem(),
-                        (String) servicoCombo2.getSelectedItem(),
-                        (String) servicoCombo3.getSelectedItem());
+                        (String) servicoCombo.getSelectedItem());
             }
         }
         return null;
@@ -141,6 +137,6 @@ public class ClienteView {
     }
 
     public Component getFrame() {
-        return frame; // Retorna o frame corretamente
+        return frame;
     }
 }
