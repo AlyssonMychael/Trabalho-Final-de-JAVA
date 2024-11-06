@@ -10,7 +10,7 @@ public class ClienteDAO {
 
     public ClienteDAO() {
         try {
-            String url = "jdbc:sqlite:cliente.db";
+            String url = "jdbc:sqlite:clientes.db";
             conexao = DriverManager.getConnection(url);
             criarTabelaClientes();
         } catch (SQLException e) {
